@@ -51,7 +51,8 @@ export function refreshEditor(editor: vscode.TextEditor): void {
         lines.push(editor.document.lineAt(i).text);
     }
 
-    const { hiddenRanges } = parseHideComments(lines);
+    const languageId = editor.document.languageId;
+    const { hiddenRanges } = parseHideComments(lines, languageId);
 
     if (hiddenRanges.length === 0) {
         clearDecorations(editor);

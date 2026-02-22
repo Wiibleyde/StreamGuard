@@ -31,6 +31,11 @@ export const COMMENT_TOKENS = {
 } as const;
 
 /**
+ * Configuration key for user-defined language comment prefixes.
+ */
+export const LANGUAGE_CONFIG_KEY = "streamHider.languageCommentPrefixes";
+
+/**
  * Name of the VSCode OutputChannel used for extension logging.
  */
 export const OUTPUT_CHANNEL_NAME = "StreamHider";
