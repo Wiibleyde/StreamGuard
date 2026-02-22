@@ -34,3 +34,17 @@ export interface DecorationContext {
     hiddenRanges: HiddenRange[];
     replacement: string;
 }
+
+/**
+ * Describes the comment syntax for a programming language.
+ */
+export interface LanguageCommentConfig {
+    /** VSCode language identifier (e.g. "typescript", "lua"). */
+    id: string;
+    /** Human-readable display name (e.g. "TypeScript", "Lua"). */
+    displayName: string;
+    /** Single-line comment prefixes (e.g. ["//"] or ["--"]). */
+    singleLine: string[];
+    /** Optional block comment delimiters. */
+    block?: { start: string; end: string };
+}

@@ -48,6 +48,17 @@
           "type": "string",
           "default": "[ 🔴 HIDDEN ]",
           "description": "Placeholder text shown instead of hidden content"
+        },
+        "streamHider.languageCommentPrefixes": {
+          "type": "object",
+          "default": {},
+          "description": "Custom comment prefixes per language ID. Maps a VSCode language ID to an array of single-line comment prefixes. Example: { \"lua\": [\"--\"], \"python\": [\"#\"] }",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     }

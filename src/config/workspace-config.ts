@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
-import { CONFIG_KEYS, DEFAULT_REPLACEMENT } from "../constants";
+import { CONFIG_KEYS, DEFAULT_REPLACEMENT, LANGUAGE_CONFIG_KEY } from "../constants";
+import { applyCustomPrefixes } from "../languages/language-config";
 import type { StreamHiderConfig } from "../types";
 
 /**
@@ -12,6 +13,12 @@ export function readConfig(): StreamHiderConfig {
     const hiddenFilePatterns = cfg.get<string[]>(CONFIG_KEYS.HIDDEN_FILE_PATTERNS) ?? [];
     const hiddenFolders = cfg.get<string[]>(CONFIG_KEYS.HIDDEN_FOLDERS) ?? [];
     const replacement = cfg.get<string>(CONFIG_KEYS.REPLACEMENT) ?? DEFAULT_REPLACEMENT;
+
+    // Apply user-defined language comment prefixes (if any)
+    const customPrefixes = cfg.get<Record<string, string[]>>(LANGUAGE_CONFIG_KEY) ?? {};
+    if (Object.keys(customPrefixes).length > 0) {
+        applyCustomPrefixes(customPrefixes);
+    }
 
     return { enabled, hiddenFilePatterns, hiddenFolders, replacement };
 }
