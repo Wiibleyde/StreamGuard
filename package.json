@@ -1,0 +1,73 @@
+{
+  "name": "stream-hider",
+  "displayName": "StreamHider",
+  "description": "Hide sensitive parts of your code visually during live streams without modifying source files",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "streamHider.toggle",
+        "title": "StreamHider: Toggle Stream Mode"
+      }
+    ],
+    "configuration": {
+      "title": "StreamHider",
+      "properties": {
+        "streamHider.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or disable StreamHider globally"
+        },
+        "streamHider.hiddenFilePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Glob patterns of files whose content should be hidden"
+        },
+        "streamHider.hiddenFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Folder glob patterns to hide in explorer and editor"
+        },
+        "streamHider.replacement": {
+          "type": "string",
+          "default": "[ 🔴 HIDDEN ]",
+          "description": "Placeholder text shown instead of hidden content"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "biome check src",
+    "format": "biome format --write src",
+    "test": "mocha --require ts-node/register 'src/test/**/*.test.ts'"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.5",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.8",
+    "mocha": "^10.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
