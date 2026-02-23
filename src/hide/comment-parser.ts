@@ -1,6 +1,6 @@
 import { COMMENT_TOKENS } from "../constants";
 import { getCommentPrefixes } from "../languages/language-config";
-import type { RedactedRange, ParseResult } from "../types";
+import type { ParseResult, RedactedRange } from "../types";
 
 /**
  * Returns true when the line contains the given token inside a comment.
