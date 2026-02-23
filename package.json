@@ -2,7 +2,7 @@
   "name": "stream-hider",
   "displayName": "StreamHider",
   "description": "Hide sensitive parts of your code visually during live streams without modifying source files",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "publisher": "NathanBonnell",
   "license": "MIT",
   "icon": "icon.png",
