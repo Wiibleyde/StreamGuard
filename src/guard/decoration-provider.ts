@@ -11,7 +11,7 @@ function getDecorationType(): vscode.TextEditorDecorationType {
 
     maskedDecorationType = vscode.window.createTextEditorDecorationType({
         backgroundColor: new vscode.ThemeColor("editorWarning.foreground"),
-        color: new vscode.ThemeColor("editor.background"),
+        color: new vscode.ThemeColor("editorWarning.foreground"),
         isWholeLine: true,
         overviewRulerColor: new vscode.ThemeColor("editorWarning.foreground"),
         overviewRulerLane: vscode.OverviewRulerLane.Full,
