@@ -3,31 +3,30 @@ import { parseGuardComments } from "../guard/comment-parser";
 
 describe("comment-parser", () => {
     describe("@stream-guard-next", () => {
-        it("hides the annotation and the line immediately following it", () => {
+        it("hides only the line following the annotation, not the annotation itself", () => {
             const lines = ["// @stream-guard-next", "const value = 'example';", "const visible = true;"];
             const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
 
         it("does not hide lines beyond the next line", () => {
             const lines = ["// @stream-guard-next", "const value = 'example';", "const alsoVisible = true;"];
             const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 1);
-            assert.strictEqual(maskedRanges[0].startLine, 0);
+            assert.strictEqual(maskedRanges[0].startLine, 1);
             assert.strictEqual(maskedRanges[0].endLine, 1);
         });
 
-        it("handles annotation at the very last line (no following line)", () => {
+        it("produces no range when annotation is at the very last line", () => {
             const lines = ["// @stream-guard-next"];
             const { maskedRanges } = parseGuardComments(lines);
-            assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 0 });
+            assert.strictEqual(maskedRanges.length, 0);
         });
     });
 
     describe("@stream-guard-start / @stream-guard-end", () => {
-        it("hides the entire block between start and end (inclusive)", () => {
+        it("hides only the content between start and end, not the markers", () => {
             const lines = [
                 "const a = 1;",
                 "// @stream-guard-start",
@@ -38,7 +37,7 @@ describe("comment-parser", () => {
             ];
             const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 4 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 2, endLine: 3 });
         });
 
         it("supports multiple blocks in the same file", () => {
@@ -53,14 +52,20 @@ describe("comment-parser", () => {
             ];
             const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 2);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 2 });
-            assert.deepStrictEqual(maskedRanges[1], { startLine: 4, endLine: 6 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[1], { startLine: 5, endLine: 5 });
         });
 
         it("ignores a start without a matching end", () => {
             const lines = ["// @stream-guard-start", "const orphan = true;"];
             const { maskedRanges } = parseGuardComments(lines);
             // No end token → no completed range
+            assert.strictEqual(maskedRanges.length, 0);
+        });
+
+        it("produces no range when start and end are adjacent (no content)", () => {
+            const lines = ["// @stream-guard-start", "// @stream-guard-end"];
+            const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 0);
         });
     });
@@ -108,21 +113,21 @@ describe("comment-parser", () => {
             const lines = ["-- @stream-guard-next", "local value = 'example'", "local visible = true"];
             const { maskedRanges } = parseGuardComments(lines, "lua");
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
 
         it("parses Python-style comments with # prefix", () => {
             const lines = ["# @stream-guard-next", "value = 'example'", "visible = True"];
             const { maskedRanges } = parseGuardComments(lines, "python");
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
 
         it("parses TypeScript-style comments with // prefix", () => {
             const lines = ["// @stream-guard-next", "const value = 'example';", "const visible = true;"];
             const { maskedRanges } = parseGuardComments(lines, "typescript");
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
 
         it("parses Lua-style block hide comments", () => {
@@ -136,7 +141,7 @@ describe("comment-parser", () => {
             ];
             const { maskedRanges } = parseGuardComments(lines, "lua");
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 4 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 2, endLine: 3 });
         });
 
         it("parses Lua-style inline hide comments", () => {
@@ -161,13 +166,14 @@ describe("comment-parser", () => {
             const lines = ["-- @stream-guard-next", "local value = 'example'"];
             const { maskedRanges } = parseGuardComments(lines);
             assert.strictEqual(maskedRanges.length, 1);
-            assert.deepStrictEqual(maskedRanges[0], { startLine: 0, endLine: 1 });
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
 
         it("uses fallback prefixes for unknown languages", () => {
             const lines = ["// @stream-guard-next", "some code"];
             const { maskedRanges } = parseGuardComments(lines, "unknown-lang-xyz");
             assert.strictEqual(maskedRanges.length, 1);
+            assert.deepStrictEqual(maskedRanges[0], { startLine: 1, endLine: 1 });
         });
     });
 });

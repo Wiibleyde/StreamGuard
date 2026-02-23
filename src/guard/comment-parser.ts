@@ -30,8 +30,8 @@ function isTokenInComment(line: string, token: string, commentPrefixes: string[]
  * based on `@stream-guard-*` comment annotations.
  *
  * Rules:
- *  - `// @stream-guard-next`   → redacts the annotation *and* the next line
- *  - `// @stream-guard-start` / `// @stream-guard-end` → redacts the block between them (inclusive)
+ *  - `// @stream-guard-next`   → redacts only the next line (the annotation stays visible)
+ *  - `// @stream-guard-start` / `// @stream-guard-end` → redacts the content between them (markers stay visible)
  *  - `// @stream-guard-inline` at end of line → redacts that specific line
  *
  * An optional `languageId` (VSCode language identifier) can be supplied to
@@ -56,7 +56,11 @@ export function parseGuardComments(lines: string[], languageId?: string): ParseR
 
         if (isTokenInComment(line, COMMENT_TOKENS.GUARD_END, prefixes)) {
             if (blockStart !== undefined) {
-                maskedRanges.push({ startLine: blockStart, endLine: i });
+                const contentStart = blockStart + 1;
+                const contentEnd = i - 1;
+                if (contentStart <= contentEnd) {
+                    maskedRanges.push({ startLine: contentStart, endLine: contentEnd });
+                }
                 blockStart = undefined;
             }
             continue;
@@ -74,15 +78,13 @@ export function parseGuardComments(lines: string[], languageId?: string): ParseR
         }
 
         if (guardNextFrom !== undefined) {
-            maskedRanges.push({ startLine: guardNextFrom, endLine: i });
+            maskedRanges.push({ startLine: i, endLine: i });
             guardNextFrom = undefined;
         }
     }
 
-    // If @stream-guard-next was the very last line, still redact the annotation itself
-    if (guardNextFrom !== undefined) {
-        maskedRanges.push({ startLine: guardNextFrom, endLine: guardNextFrom });
-    }
+    // If @stream-guard-next was the very last line, there is no content line to hide
+    // so we simply discard the pending annotation.
 
     return { maskedRanges };
 }
