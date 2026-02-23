@@ -55,6 +55,11 @@
           "default": [],
           "description": "Folder glob patterns to mask in explorer and editor"
         },
+        "streamGuard.decorationColor": {
+          "type": "string",
+          "default": "",
+          "description": "Custom color for the StreamGuard decoration overlay (CSS hex, e.g. '#ff0000'). Leave empty to use the editor warning theme color."
+        },
         "streamGuard.languageCommentPrefixes": {
           "type": "object",
           "default": {},

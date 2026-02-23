@@ -30,7 +30,8 @@ export function activate(context: vscode.ExtensionContext): void {
     logInfo("StreamGuard activating.");
 
     // Eagerly create the decoration type so it's ready before any editor opens
-    initDecorations();
+    const initialConfig = readConfig();
+    initDecorations(initialConfig.decorationColor);
 
     // Pre-parse all currently open documents so the cache is warm
     for (const doc of vscode.workspace.textDocuments) {

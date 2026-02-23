@@ -12,6 +12,7 @@ export const CONFIG_KEYS = {
     ENABLED: "streamGuard.enabled",
     MASKED_FILE_PATTERNS: "streamGuard.maskedFilePatterns",
     MASKED_FOLDERS: "streamGuard.maskedFolders",
+    DECORATION_COLOR: "streamGuard.decorationColor",
 } as const;
 
 /**
