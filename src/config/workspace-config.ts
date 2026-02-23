@@ -12,6 +12,7 @@ export function readConfig(): StreamGuardConfig {
     const enabled = cfg.get<boolean>(CONFIG_KEYS.ENABLED) ?? false;
     const maskedFilePatterns = cfg.get<string[]>(CONFIG_KEYS.MASKED_FILE_PATTERNS) ?? [];
     const maskedFolders = cfg.get<string[]>(CONFIG_KEYS.MASKED_FOLDERS) ?? [];
+    const decorationColor = cfg.get<string>(CONFIG_KEYS.DECORATION_COLOR) ?? "";
 
     // Apply user-defined language comment prefixes (if any)
     const customPrefixes = cfg.get<Record<string, string[]>>(LANGUAGE_CONFIG_KEY) ?? {};
@@ -19,5 +20,5 @@ export function readConfig(): StreamGuardConfig {
         applyCustomPrefixes(customPrefixes);
     }
 
-    return { enabled, maskedFilePatterns, maskedFolders };
+    return { enabled, maskedFilePatterns, maskedFolders, decorationColor };
 }

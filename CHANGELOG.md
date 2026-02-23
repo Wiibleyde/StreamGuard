@@ -4,6 +4,12 @@ All notable changes to the **StreamGuard** extension will be documented in this 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] — 2026-02-23
+
+### Added
+
+- **Custom decoration color** — new `streamGuard.decorationColor` setting lets you pick any CSS hex color (e.g. `#ff0000`) for the masking overlay. Defaults to the editor warning theme color when left empty.
+
 ## [1.0.0] — 2026-02-22
 
 ### Added

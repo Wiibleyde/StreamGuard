@@ -100,7 +100,7 @@ export function refreshEditor(editor: vscode.TextEditor): void {
     // Try the cache first for instant application
     const cached = rangeCache.get(cacheKey);
     if (cached && cached.length > 0) {
-        applyDecorations({ editor, maskedRanges: cached });
+        applyDecorations({ editor, maskedRanges: cached, decorationColor: config.decorationColor });
         return;
     }
 
@@ -115,7 +115,7 @@ export function refreshEditor(editor: vscode.TextEditor): void {
         }
         const maskedRanges = [{ startLine: 0, endLine: lineCount - 1 }];
         rangeCache.set(cacheKey, maskedRanges);
-        applyDecorations({ editor, maskedRanges });
+        applyDecorations({ editor, maskedRanges, decorationColor: config.decorationColor });
         logInfo(`masked entire file: ${filePath}`);
         return;
     }
@@ -135,7 +135,7 @@ export function refreshEditor(editor: vscode.TextEditor): void {
     }
 
     rangeCache.set(cacheKey, maskedRanges);
-    applyDecorations({ editor, maskedRanges });
+    applyDecorations({ editor, maskedRanges, decorationColor: config.decorationColor });
     logInfo(`Applied ${maskedRanges.length} masked range(s) to ${filePath}`);
 }
 

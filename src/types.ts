@@ -7,6 +7,8 @@ export interface StreamGuardConfig {
     enabled: boolean;
     maskedFilePatterns: string[];
     maskedFolders: string[];
+    /** Custom decoration color (CSS hex string). Empty string means use default theme color. */
+    decorationColor: string;
 }
 
 /**
@@ -31,6 +33,8 @@ export interface ParseResult {
 export interface DecorationContext {
     editor: vscode.TextEditor;
     maskedRanges: MaskedRange[];
+    /** Custom decoration color (CSS hex string). Empty or undefined means use default theme color. */
+    decorationColor?: string;
 }
 
 /**

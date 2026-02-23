@@ -100,7 +100,8 @@ const port = 3000;
 {
   "streamGuard.enabled": true,
   "streamGuard.maskedFilePatterns": ["**/generated.*", "**/build/output.*"],
-  "streamGuard.maskedFolders": ["**/draft/**"]
+  "streamGuard.maskedFolders": ["**/draft/**"],
+  "streamGuard.decorationColor": "#ff0000"
 }
 ```
 
@@ -109,6 +110,7 @@ const port = 3000;
 | `streamGuard.enabled` | `boolean` | `false` | Toggle the extension globally |
 | `streamGuard.maskedFilePatterns` | `string[]` | `[]` | Glob patterns — files matching these have their entire content masked |
 | `streamGuard.maskedFolders` | `string[]` | `[]` | Glob patterns — files inside matching folders are fully masked |
+| `streamGuard.decorationColor` | `string` | `""` | Custom color for the overlay (CSS hex, e.g. `"#ff0000"`). Empty = editor warning theme color |
 | `streamGuard.languageCommentPrefixes` | `object` | `{}` | Custom comment prefixes per language ID (e.g. `{ "lua": ["--"] }`) |
 
 ---
